@@ -67,11 +67,11 @@
     require.config({
         "baseUrl": "../",
         "paths": {
-            "utils": "../bower_components/mobifyjs-utils/utils",
+            "mobifyjs/utils": "../bower_components/mobifyjs-utils/utils",
             "jquery": "../bower_components/jquery/dist/jquery"
         }
     });
-    require(["jquery", "utils", "resizeImages"], function($, Utils, ResizeImages) {
+    require(["jquery", "mobifyjs/utils", "resizeImages"], function($, Utils, ResizeImages) {
         QUnit.start();
         test('resize images - no projectName', function() {
             var images = document.querySelectorAll('#resizeImages-no-projectName img');
