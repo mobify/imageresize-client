@@ -1,0 +1,18 @@
+{
+    "name": "imageresize-client",
+    "version": "2.0.6",
+    "main": "resizeImages.js",
+    "dependencies": {
+        "mobifyjs-utils": "git@github.com:mobify/mobifyjs-utils.git#2.0.6"
+    },
+    "devDependencies": {
+        "requirejs": "2.1.10",
+        "qunit": "1.14.0",
+        "jquery": "1.11.0"
+    },
+    "ignore": [
+        "test",
+        "Gruntfile.js",
+        "*.md"
+    ]
+}
