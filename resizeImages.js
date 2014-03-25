@@ -125,6 +125,10 @@ ResizeImages.getImageURL = function(url, options) {
         bits.push(projectId);
     }
 
+    if (opts.cacheBreaker) {
+        bits.push('cb' + opts.cacheBreaker);
+    }
+
     if (opts.cacheHours) {
         bits.push('c' + opts.cacheHours);
     }
