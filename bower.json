@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "main": "resizeImages.js",
     "dependencies": {
-        "mobifyjs-utils": "git@github.com:mobify/mobifyjs-utils.git#1.0.0"
+        "mobifyjs-utils": "git://github.com/mobify/mobifyjs-utils.git#1.0.0"
     },
     "devDependencies": {
         "requirejs": "2.1.10",
