@@ -14,7 +14,7 @@
 }(this, function ($, ResizeImages) {
     function resizeImages(opts) {
         if(opts === undefined) {
-            opts = $.extend({}, ResizeImages.profiles.SHORT_CACHE);
+            opts = {};
         }
         var imgs = this.filter('img').add(this.find('img')).toArray();
         return $(ResizeImages.resize.call(window, imgs, opts));

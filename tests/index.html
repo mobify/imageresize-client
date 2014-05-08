@@ -92,13 +92,17 @@
     QUnit.config.autostart = false;
     require.config({
         "baseUrl": "../",
+        "map" : {
+            "*": {
+                "selectorLibrary": "jquery"
+            }
+        },
         "paths": {
             "mobifyjs/utils": "../bower_components/mobifyjs-utils/utils",
             "jquery": "../bower_components/jquery/jquery",
-            "selectorLibrary": "../bower_componenets/jqeury/jquery"
         }
     });
-    require(["jquery", "mobifyjs/utils", "resizeImages"], function($, Utils, ResizeImages) {
+    require(["jquery", "mobifyjs/utils", "resizeImages", "selectorLibraryPlugin"], function($, Utils, ResizeImages) {
         QUnit.start();
 
         var mockDocument = function(body) {
@@ -560,15 +564,12 @@
             Utils.getPhysicalScreenSize = origGPSS;
             ResizeImages.defaults.webp = origWebpSupport;
         });
-    });
 
-    require(['jquery', 'ResizeImages', 'selectorLibraryPlugin'], 
-            function($, ResizeImages){
         module('selectorLibraryPlugin');
         test('passes expcted arguments to ResizeImages.resize', function() {
             // setup
             var origResize = ResizeImages.resize;
-
+            ok(true);
             ResizeImages.resize = function(els, opts) {
                 strictEqual(els.length, 3, "expected number of elements")
                 ok($(els[0]).hasClass("one"), "one's here");
@@ -592,20 +593,18 @@
             }
 
             $("#selectorLibraryPlugin div").resizeImages();
-            $("#selectorLibraryPlugin > div").resizeImage();
+            $("#selectorLibraryPlugin > div").resizeImages();
 
             ResizeImages.resize = function(els, opts) {
                 strictEqual(els.length, 1, "only one element is passed");
-                ok($(els[1]).hasClass("three"), "element number three");
+                ok($(els[0]).hasClass("three"), "element number three");
             }
+            
             $("#selectorLibraryPlugin .three").resizeImages();
             // teardown
             ResizeImages.resize = origResize
-        })
+        }); //test
     });
-
-
-
 </script>
 </body>
 </html>
