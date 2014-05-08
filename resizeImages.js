@@ -401,6 +401,15 @@ ResizeImages.defaults = {
       onerror: 'ResizeImages.restoreOriginalSrc(event);'
 };
 
+ResizeImages.profiles = {
+    SHORT_CACHE: {
+        cacheHours: 2
+    },
+    LONG_CACHE: {
+        cacheHours: 168
+    }
+};
+
 return ResizeImages;
 
 }));

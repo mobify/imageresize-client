@@ -13,9 +13,12 @@
     }
 }(this, function ($, ResizeImages) {
     function resizeImages(opts) {
+        if(opts === undefined) {
+            opts = $.extend({}, ResizeImages.profiles.SHORT_CACHE);
+        }
         var imgs = this.filter('img').add(this.find('img')).toArray();
         return $(ResizeImages.resize.call(window, imgs, opts));
     }
     $.fn.resizeImages = resizeImages;
-    return resizeImages;
+    return ResizeImages;
 }));

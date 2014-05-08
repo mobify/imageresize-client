@@ -76,6 +76,16 @@
     <div id="resizeImages-produces-binned-sizes">
         <img x-src="http://www.example.com/foo.jpg" />
     <div>
+
+    <div id="selectorLibraryPlugin">
+        <img class="one" x-src="http://www.example.com/foo.jpg" />
+        <div>
+            <img class="two" x-src="http://www.example.com/foo.jpg" />
+            <div>
+                <img class="three" x-src="http://www.example.com/foo.jpg" />
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -84,7 +94,8 @@
         "baseUrl": "../",
         "paths": {
             "mobifyjs/utils": "../bower_components/mobifyjs-utils/utils",
-            "jquery": "../bower_components/jquery/jquery"
+            "jquery": "../bower_components/jquery/jquery",
+            "selectorLibrary": "../bower_componenets/jqeury/jquery"
         }
     });
     require(["jquery", "mobifyjs/utils", "resizeImages"], function($, Utils, ResizeImages) {
@@ -549,6 +560,48 @@
             Utils.getPhysicalScreenSize = origGPSS;
             ResizeImages.defaults.webp = origWebpSupport;
         });
+    });
+
+    require(['jquery', 'ResizeImages', 'selectorLibraryPlugin'], 
+            function($, ResizeImages){
+        module('selectorLibraryPlugin');
+        test('passes expcted arguments to ResizeImages.resize', function() {
+            // setup
+            var origResize = ResizeImages.resize;
+
+            ResizeImages.resize = function(els, opts) {
+                strictEqual(els.length, 3, "expected number of elements")
+                ok($(els[0]).hasClass("one"), "one's here");
+                ok($(els[1]).hasClass("two"), "two's here");
+                ok($(els[2]).hasClass("three"), "three's here");
+                deepEqual(opts, {}, "options are empty");
+            }
+            $("#selectorLibraryPlugin").resizeImages();
+
+            ResizeImages.resize = function(els, opts) {
+                strictEqual(els.length, 1, "only one element");
+                ok($(els[0]).hasClass("one"), "element number one");
+            }
+
+            $("#selectorLibraryPlugin > img").resizeImages();
+
+            ResizeImages.resize = function(els, opts) {
+                strictEqual(els.length, 2);
+                ok($(els[0]).hasClass("two"), "element number two");
+                ok($(els[1]).hasClass("three"), "element number three");
+            }
+
+            $("#selectorLibraryPlugin div").resizeImages();
+            $("#selectorLibraryPlugin > div").resizeImage();
+
+            ResizeImages.resize = function(els, opts) {
+                strictEqual(els.length, 1, "only one element is passed");
+                ok($(els[1]).hasClass("three"), "element number three");
+            }
+            $("#selectorLibraryPlugin .three").resizeImages();
+            // teardown
+            ResizeImages.resize = origResize
+        })
     });
 
 
