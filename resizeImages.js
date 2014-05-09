@@ -391,14 +391,15 @@ ResizeImages.restoreOriginalSrc = function(event) {
 var capturing = window.Mobify && window.Mobify.capturing || false;
 
 ResizeImages.defaults = {
-      proto: '//',
-      host: 'ir0.mobify.com',
-      projectName: "oss-" + location.hostname.replace(/[^\w]/g, '-'),
-      sourceAttribute: "x-src",
-      targetAttribute: (capturing ? "x-src" : "src"),
-      webp: ResizeImages.supportsWebp(),
-      resize: true,
-      onerror: 'ResizeImages.restoreOriginalSrc(event);'
+    cacheHours: 8,
+    proto: '//',
+    host: 'ir0.mobify.com',
+    projectName: "oss-" + location.hostname.replace(/[^\w]/g, '-'),
+    sourceAttribute: "x-src",
+    targetAttribute: (capturing ? "x-src" : "src"),
+    webp: ResizeImages.supportsWebp(),
+    resize: true,
+    onerror: 'ResizeImages.restoreOriginalSrc(event);'
 };
 
 ResizeImages.profiles = {
