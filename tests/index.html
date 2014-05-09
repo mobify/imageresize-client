@@ -77,32 +77,17 @@
         <img x-src="http://www.example.com/foo.jpg" />
     <div>
 
-    <div id="selectorLibraryPlugin">
-        <img class="one" x-src="http://www.example.com/foo.jpg" />
-        <div>
-            <img class="two" x-src="http://www.example.com/foo.jpg" />
-            <div>
-                <img class="three" x-src="http://www.example.com/foo.jpg" />
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
     QUnit.config.autostart = false;
     require.config({
         "baseUrl": "../",
-        "map" : {
-            "*": {
-                "selectorLibrary": "jquery"
-            }
-        },
         "paths": {
             "mobifyjs/utils": "../bower_components/mobifyjs-utils/utils",
             "jquery": "../bower_components/jquery/jquery",
         }
     });
-    require(["jquery", "mobifyjs/utils", "resizeImages", "selectorLibraryPlugin"], function($, Utils, ResizeImages) {
+    require(["jquery", "mobifyjs/utils", "resizeImages"],
+            function($, Utils, ResizeImages) {
         QUnit.start();
 
         var mockDocument = function(body) {
@@ -565,45 +550,51 @@
             ResizeImages.defaults.webp = origWebpSupport;
         });
 
-        module('selectorLibraryPlugin');
-        test('passes expcted arguments to ResizeImages.resize', function() {
-            // setup
-            var origResize = ResizeImages.resize;
-            ok(true);
-            ResizeImages.resize = function(els, opts) {
-                strictEqual(els.length, 3, "expected number of elements")
-                ok($(els[0]).hasClass("one"), "one's here");
-                ok($(els[1]).hasClass("two"), "two's here");
-                ok($(els[2]).hasClass("three"), "three's here");
-                deepEqual(opts, {}, "options are empty");
+        module("profiles");
+        test("cache settings", function() {
+            var fakeElement;
+            fakeElement = {
+                nodeName: "IMG",
+                hasAttribute: function() {
+                    return false;
+                },
+                getAttribute: function(){
+                    return "http://www.example.com/foo.jpg";
+                },
+                setAttribute: function(attrName, attrVal) {
+                    if(attrName !== "x-src") {
+                        return;
+                    }
+                    strictEqual(attrVal, "//ir0.mobify.com/project-test/c2/http://www.example.com/foo.jpg", 
+                                "attr is set with expected caching parameter");
+
+                },
+                removeAttribute: function() {}
+            };
+            var baseOptions = {
+                resize: false,
+                projectName: "test",
+                sourceAttribute: "x-src",
+                targetAttribute: "x-src",
+                webp: false
+            };
+            var options = Utils.extend({}, baseOptions,
+                                       ResizeImages.profiles.SHORT_CACHE);
+            ResizeImages.resize([fakeElement], options);
+
+            fakeElement.setAttribute = function(attrName, attrVal) {
+                if(attrName !== "x-src") {
+                    return;
+                }
+                strictEqual(attrVal, "//ir0.mobify.com/project-test/c168/http://www.example.com/foo.jpg", 
+                            "attr is set with expected caching parameter");
+
             }
-            $("#selectorLibraryPlugin").resizeImages();
 
-            ResizeImages.resize = function(els, opts) {
-                strictEqual(els.length, 1, "only one element");
-                ok($(els[0]).hasClass("one"), "element number one");
-            }
-
-            $("#selectorLibraryPlugin > img").resizeImages();
-
-            ResizeImages.resize = function(els, opts) {
-                strictEqual(els.length, 2);
-                ok($(els[0]).hasClass("two"), "element number two");
-                ok($(els[1]).hasClass("three"), "element number three");
-            }
-
-            $("#selectorLibraryPlugin div").resizeImages();
-            $("#selectorLibraryPlugin > div").resizeImages();
-
-            ResizeImages.resize = function(els, opts) {
-                strictEqual(els.length, 1, "only one element is passed");
-                ok($(els[0]).hasClass("three"), "element number three");
-            }
-            
-            $("#selectorLibraryPlugin .three").resizeImages();
-            // teardown
-            ResizeImages.resize = origResize
-        }); //test
+            var options = Utils.extend({}, baseOptions,
+                                       ResizeImages.profiles.LONG_CACHE);
+            ResizeImages.resize([fakeElement], options);
+        });
     });
 </script>
 </body>
