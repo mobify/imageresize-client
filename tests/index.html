@@ -553,6 +553,8 @@
         module("profiles");
         test("cache settings", function() {
             var fakeElement;
+            /* A fake element with asserting implementation of all the methods 
+            called on it by the resize method */
             fakeElement = {
                 nodeName: "IMG",
                 hasAttribute: function() {
@@ -582,6 +584,8 @@
                                        ResizeImages.profiles.SHORT_CACHE);
             ResizeImages.resize([fakeElement], options);
 
+            /* An alternative implementation fo setAttribute for the second test
+            case */
             fakeElement.setAttribute = function(attrName, attrVal) {
                 if(attrName !== "x-src") {
                     return;
