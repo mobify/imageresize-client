@@ -553,8 +553,10 @@
         module("profiles");
         test("cache settings", function() {
             var fakeElement;
-            /* A fake element with asserting implementation of all the methods 
-            called on it by the resize method */
+            /*
+             * A fake element with asserting implementations of all the methods 
+             * called on it by the resize method
+             */
             fakeElement = {
                 nodeName: "IMG",
                 hasAttribute: function() {
@@ -564,7 +566,7 @@
                     return "http://www.example.com/foo.jpg";
                 },
                 setAttribute: function(attrName, attrVal) {
-                    if(attrName !== "x-src") {
+                    if (attrName !== "x-src") {
                         return;
                     }
                     strictEqual(attrVal, "//ir0.mobify.com/project-test/c2/http://www.example.com/foo.jpg", 
@@ -584,10 +586,12 @@
                                        ResizeImages.profiles.SHORT_CACHE);
             ResizeImages.resize([fakeElement], options);
 
-            /* An alternative implementation fo setAttribute for the second test
-            case */
+            /* 
+             * An alternative implementation of setAttribute for the second test
+             * case
+             */
             fakeElement.setAttribute = function(attrName, attrVal) {
-                if(attrName !== "x-src") {
+                if (attrName !== "x-src") {
                     return;
                 }
                 strictEqual(attrVal, "//ir0.mobify.com/project-test/c168/http://www.example.com/foo.jpg", 
