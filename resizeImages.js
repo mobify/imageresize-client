@@ -157,7 +157,9 @@ ResizeImages.getImageURL = function(url, options) {
  */
 
 ResizeImages._rewriteSrcAttribute = function(element, opts, srcVal){
-    srcVal = element.getAttribute(opts.sourceAttribute) || srcVal;
+    srcVal = element.getAttribute(opts.sourceAttribute) ||
+             element.getAttribute(opts.sourceSetAttribute) ||
+             srcVal;
     if (srcVal) {
         var url = Utils.absolutify(srcVal);
         if (Utils.httpUrl(url)) {
@@ -167,10 +169,12 @@ ResizeImages._rewriteSrcAttribute = function(element, opts, srcVal){
             element.setAttribute(opts.targetAttribute, ResizeImages.getImageURL(url, opts));
             element.setAttribute('data-orig-src', srcVal);
             // if using resize when not capturing, remove the sourceAttribute
-            // as long as it's not "src", which is the target attribute used
-            // when not capturing.
+            // or sourceSetAttribute as long as it's not "src", which is the target
+            // attribute used when not capturing.
             if (!capturing && opts.sourceAttribute != opts.targetAttribute) {
                 element.removeAttribute(opts.sourceAttribute);
+            } else if (!capturing && opts.sourceSetAttribute != opts.targetAttribute) {
+                element.removeAttribute(opts.sourceSetAttribute);
             }
         }
     }
@@ -396,6 +400,7 @@ ResizeImages.defaults = {
     host: 'ir0.mobify.com',
     projectName: "oss-" + location.hostname.replace(/[^\w]/g, '-'),
     sourceAttribute: "x-src",
+    sourceSetAttribute: "x-src",
     targetAttribute: (capturing ? "x-src" : "src"),
     webp: ResizeImages.supportsWebp(),
     resize: true,
