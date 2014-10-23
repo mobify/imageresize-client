@@ -50,7 +50,7 @@
 
     <div id="resizeImages-picture-element">
         <picture data-src="http://www.mobify.com/i/phone-tablet.png">
-            <source src="http://www.mobify.com/i/phone-tablet-small.png" data-media="(min-width: 800px)" data-width="300" id="width-and-src">
+            <source srcset="http://www.mobify.com/i/phone-tablet-small.png" data-media="(min-width: 800px)" data-width="300" id="width-and-src">
             <source media="(min-width: 800px)" data-width="400" id="width-and-no-src">
             <source media="(min-width: 1000px)" id="no-width-and-no-src">
             <img src="http://www.mobify.com/i/phone-tablet-small.png">
@@ -457,6 +457,7 @@
                 maxHeight: 480,
                 webp: false,
                 sourceAttribute: 'src',
+                sourceSetAttribute: 'srcset',
                 devicePixelRatio: 1
             });
 
@@ -467,16 +468,15 @@
                     "if source not properly parsed (iOS 4.3), src for img element inside of a picture element should remain");
                 return;
             }
-
-            equal(images[0].querySelectorAll("#width-and-src")[0].getAttribute("src"),
+            equal(images[0].querySelectorAll("#width-and-src")[0].getAttribute("srcset"),
                   "//ir0.mobify.com/project-test1/c8/300/480/http://www.mobify.com/i/phone-tablet-small.png",
                   "source in picture has width overridden, and uses own src");
 
-            equal(images[0].querySelectorAll("#width-and-no-src")[0].getAttribute("src"),
+            equal(images[0].querySelectorAll("#width-and-no-src")[0].getAttribute("srcset"),
                   "//ir0.mobify.com/project-test1/c8/400/480/http://www.mobify.com/i/phone-tablet.png",
                   "source in picture has width overridden, and uses data-src in picture");
 
-            equal(images[0].querySelectorAll("#no-width-and-no-src")[0].getAttribute("src"),
+            equal(images[0].querySelectorAll("#no-width-and-no-src")[0].getAttribute("srcset"),
                   "//ir0.mobify.com/project-test1/c8/1280/480/http://www.mobify.com/i/phone-tablet.png",
                   "source in picture has no width overide, and uses data-src in picture");
         });
@@ -579,7 +579,7 @@
                 resize: false,
                 projectName: "test",
                 sourceAttribute: "x-src",
-                targetAttribute: "x-src",
+                targetSrcAttribute: "x-src",
                 webp: false
             };
             var options = Utils.extend({}, baseOptions,
