@@ -1,2 +1,5 @@
+1.0.3
+    - Supports rewriting `srcset` attribute in `<source>` elements in `<picture>`
+      element.
 1.0.2
     - Sets default cacheHours to 8
