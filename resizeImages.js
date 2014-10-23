@@ -157,20 +157,27 @@ ResizeImages.getImageURL = function(url, options) {
  */
 
 ResizeImages._rewriteSrcAttribute = function(element, opts, srcVal){
-    srcVal = element.getAttribute(opts.sourceAttribute) || srcVal;
+    srcVal = element.getAttribute(opts.sourceAttribute) ||
+             element.getAttribute(opts.sourceSetAttribute) ||
+             srcVal;
     if (srcVal) {
         var url = Utils.absolutify(srcVal);
         if (Utils.httpUrl(url)) {
             if (opts.onerror) {
                 element.setAttribute('onerror', opts.onerror);
             }
-            element.setAttribute(opts.targetAttribute, ResizeImages.getImageURL(url, opts));
+            // if the element is a source element, then we always want to set srcset rather then src
+            var targetAttribute = (element.nodeName === 'SOURCE') ? opts.targetSrcSetAttribute : opts.targetSrcAttribute;
+
+            element.setAttribute(targetAttribute, ResizeImages.getImageURL(url, opts));
             element.setAttribute('data-orig-src', srcVal);
             // if using resize when not capturing, remove the sourceAttribute
-            // as long as it's not "src", which is the target attribute used
-            // when not capturing.
-            if (!capturing && opts.sourceAttribute != opts.targetAttribute) {
+            // or sourceSetAttribute as long as it's not "src", which is the target
+            // attribute used when not capturing.
+            if (!capturing && opts.sourceAttribute != opts.targetSrcAttribute) {
                 element.removeAttribute(opts.sourceAttribute);
+            } else if (!capturing && opts.sourceSetAttribute != opts.targetSrcSetAttribute) {
+                element.removeAttribute(opts.sourceSetAttribute);
             }
         }
     }
@@ -361,11 +368,14 @@ ResizeImages.resize = function(elements, options) {
     }
     var opts = ResizeImages.processOptions(options);
 
-    for(var i=0; i < elements.length; i++) {
+    for (var i=0; i < elements.length; i++) {
         var element = elements[i];
-
         // For an `img`, simply modify the src attribute
         if (element.nodeName === 'IMG' && !element.hasAttribute('mobify-optimized')) {
+            // Skip this image if it's parent is a picture element
+            if (element.parentNode && element.parentNode.nodeName === 'PICTURE') {
+                continue;
+            }
             element.setAttribute('mobify-optimized', '');
             ResizeImages._rewriteSrcAttribute(element, opts);
         }
@@ -396,7 +406,9 @@ ResizeImages.defaults = {
     host: 'ir0.mobify.com',
     projectName: "oss-" + location.hostname.replace(/[^\w]/g, '-'),
     sourceAttribute: "x-src",
-    targetAttribute: (capturing ? "x-src" : "src"),
+    sourceSetAttribute: "x-srcset",
+    targetSrcAttribute: (capturing ? "x-src" : "src"),
+    targetSrcSetAttribute: (capturing ? "x-srcset" : "srcset"),
     webp: ResizeImages.supportsWebp(),
     resize: true,
     onerror: 'ResizeImages.restoreOriginalSrc(event);'
