@@ -20,3 +20,6 @@ Then install the local dependencies:
 And if you have Saucelabs credentials:
 
     grunt saucelabs
+
+## API
+See [https://github.com/mobify/cloud_docs/blob/master/content/pages/adaptivejs/api.md#resizeimages-resize-images](https://github.com/mobify/cloud_docs/blob/master/content/pages/adaptivejs/api.md#resizeimages-resize-images)

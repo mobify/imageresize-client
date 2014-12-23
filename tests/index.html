@@ -69,6 +69,10 @@
         <img x-src="http://www.mobify.com/static/img/team/dave@2x.png"
     </div>
 
+    <div id="resizeImages-set-format-no-transform">
+        <img x-src="http://www.mobify.com/static/img/team/dave@2x.png"
+    </div>
+
     <div id="resizeImages-adds-onerror">
         <img x-src="http://www.mobify.com/i/phone-tablet.png" />
     </div>
@@ -106,14 +110,14 @@
         });
 
         test('processOptions - high dpr', function() {
-            expectedOpts = Utils.extend({}, ResizeImages.defaults, {
+            var expectedOpts = Utils.extend({}, ResizeImages.defaults, {
                 projectName: 'test1',
                 maxWidth: 640,
                 maxHeight: 960,
                 webp: false,
                 devicePixelRatio: 2,
             });
-            opts = ResizeImages.processOptions({
+            var opts = ResizeImages.processOptions({
                 projectName: 'test1',
                 maxWidth: 320,
                 maxHeight: 480,
@@ -137,7 +141,7 @@
                 quality: '95',
             });
             var url = ResizeImages.getImageURL('http://test/image.jpg', options);
-            expectedUrl = '//ir0.mobify.com/project-test1/cb872142/c8/png95/320/480/http://test/image.jpg';
+            var expectedUrl = '//ir0.mobify.com/project-test1/cb872142/c8/png95/320/480/http://test/image.jpg';
 
             equal(url, expectedUrl);
         });
@@ -154,10 +158,50 @@
                 webp: false
             }));
 
-            expectedSrc = "//ir0.mobify.com/project-oss-localhost/c8/q30/320/http://www.mobify.com/static/img/team/dave@2x.png"
+            var expectedSrc = "//ir0.mobify.com/project-oss-localhost/c8/q30/320/http://www.mobify.com/static/img/team/dave@2x.png"
 
             equal(result, expectedSrc)
         });
+
+        test('getImageURL - set format to no-transform', function() {
+            var image = document.querySelectorAll('#resizeImages-set-format-no-transform img')[0];
+            var src = image.getAttribute('x-src');
+
+            var result = ResizeImages.getImageURL(src, 
+                Utils.extend({}, {
+                proto: "//",
+                host: "ir0.mobify.com",
+                projectName: "oss-localhost",
+                format: "no-transform"
+            }));
+
+            var expectedSrc = "//ir0.mobify.com/project-oss-localhost/no-transform/http://www.mobify.com/static/img/team/dave@2x.png"
+            equal(result, expectedSrc);
+
+            var result = ResizeImages.getImageURL(src,
+                Utils.extend({}, ResizeImages.defaults, {
+                    format: "no-transform",
+                    cacheBreaker: "321",
+                    cacheHours: "8"
+            }));
+
+            expectedSrc = "//ir0.mobify.com/project-oss-localhost/cb321/c8/no-transform/http://www.mobify.com/static/img/team/dave@2x.png"
+            equal(result, expectedSrc,
+                "Can be combined with cacheBreaker and cacheHours");
+
+            var result = ResizeImages.getImageURL(src,
+                Utils.extend({}, ResizeImages.defaults, {
+                    format: "no-transform",
+                    cacheBreaker: "321",
+                    cacheHours: "8",
+                    height: 100,
+                    width: 200
+            }));
+
+            expectedSrc = "//ir0.mobify.com/project-oss-localhost/cb321/c8/no-transform/http://www.mobify.com/static/img/team/dave@2x.png"
+            equal(result, expectedSrc,
+                "drops height and width when format is no-transform");
+        })
 
         module("_rewriteSrcAttribute");
         test('_rewriteSrcAttribute - non-http', function() {
