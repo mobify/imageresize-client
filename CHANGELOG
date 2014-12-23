@@ -1,3 +1,6 @@
+1.0.4
+    - Add support for `"no-transform"` format, which will drop any sizing 
+    parameters, and cause the image to be passed through.
 1.0.3
     - Supports rewriting `srcset` attribute in `<source>` elements in `<picture>`
       element.

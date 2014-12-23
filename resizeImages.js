@@ -133,7 +133,20 @@ ResizeImages.getImageURL = function(url, options) {
         bits.push('c' + opts.cacheHours);
     }
 
+    if (opts.format && opts.format === "no-transform") {
+        bits.push(opts.format);
+        bits.push(url);
+        return bits.join('/');
+    }
+
     if (opts.format) {
+        // return early in no-transform case
+        if (opts.format === "no-transform") {
+            bits.push(opts.format);
+            bits.push(url);
+            return bits.join('/');
+        }
+
         bits.push(opts.format + (opts.quality || ''));
     } else if (opts.quality) {
         bits.push('q' + opts.quality);
