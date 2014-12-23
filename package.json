@@ -1,6 +1,6 @@
 {
     "name": "imageresize-client",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "devDependencies": {
         "grunt": "~0.4.0",
         "grunt-express": "~0.3.6",
