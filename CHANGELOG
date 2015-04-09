@@ -1,3 +1,5 @@
+1.0.5
+    - Stop throwing exceptions if browser doesn't have JSON library.
 1.0.4
     - Add support for `"no-transform"` format, which will drop any sizing 
     parameters, and cause the image to be passed through.

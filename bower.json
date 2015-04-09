@@ -1,6 +1,6 @@
 {
     "name": "imageresize-client",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "main": "resizeImages.js",
     "dependencies": {
         "mobifyjs-utils": "git://github.com/mobify/mobifyjs-utils.git#1.0.0"
