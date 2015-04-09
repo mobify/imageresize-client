@@ -79,6 +79,10 @@ ResizeImages.dataUriWebpDetect = function(callback) {
  * Also caches results for WEBP support in localStorage.
  */
 ResizeImages.supportsWebp = function(callback) {
+    // False if we have no JSON module
+    if (typeof JSON !== 'object') {
+        return false;
+    }
 
     // Return early if we have persisted WEBP support
     if (Utils.supportsLocalStorage()) {
