@@ -1,0 +1,7 @@
+tests/
+node_modules/
+.gitignore
+.git
+Gruntfile.js
+bower.json
+circle.yml
